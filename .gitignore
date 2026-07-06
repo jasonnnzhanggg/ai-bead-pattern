@@ -1,0 +1,6 @@
+.tools/
+work/
+outputs/
+node_modules/
+dist/
+.DS_Store
