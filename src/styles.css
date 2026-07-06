@@ -22,3 +22,71 @@ main {
   margin: 0 auto;
   padding: 72px 0;
 }
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #25231f;
+  border-radius: 12px;
+  background: #f0c94b;
+  color: #25231f;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px solid #cfc8bb;
+  border-radius: 16px;
+}
+
+fieldset label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+}
+
+.upload-control {
+  display: grid;
+  gap: 8px;
+  padding: 24px;
+  border: 2px dashed #867b68;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+.variant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.variant-grid article {
+  padding: 18px;
+  border: 1px solid #cfc8bb;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 32px 0;
+  }
+
+  .variant-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,31 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { App } from "../../src/app/App";
+
+it("moves from image upload to board setup and three candidates", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+  const image = new File(["image"], "cat.png", { type: "image/png" });
+
+  await user.upload(screen.getByLabelText("选择图片"), image);
+  expect(screen.getByText("cat.png")).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "继续设置" }));
+
+  expect(screen.getByRole("heading", { name: "选择制作规格" })).toBeVisible();
+  await user.click(screen.getByLabelText("5mm普通豆"));
+  await user.click(screen.getByLabelText("25×25格"));
+  await user.click(screen.getByRole("button", { name: "生成模板" }));
+
+  expect(screen.getByText("高还原版")).toBeVisible();
+  expect(screen.getByText("推荐成品版")).toBeVisible();
+  expect(screen.getByText("易拼版")).toBeVisible();
+});
+
+it("keeps the upload screen when no image is selected", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+
+  expect(screen.getByRole("button", { name: "继续设置" })).toBeDisabled();
+  await user.click(screen.getByRole("button", { name: "继续设置" }));
+  expect(screen.getByRole("heading", { name: "把图片变成拼豆模板" })).toBeVisible();
+});
