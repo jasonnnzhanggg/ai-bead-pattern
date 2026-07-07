@@ -3,8 +3,13 @@ import type { BeadSizeId, BoardPresetId } from "../domain/boards";
 import { ImportScreen } from "../screens/ImportScreen";
 import { SetupScreen } from "../screens/SetupScreen";
 import { VariantsScreen } from "../screens/VariantsScreen";
+import { EditorScreen } from "../editor/EditorScreen";
+import { createProject } from "../domain/project";
+import { createEmptyGrid } from "../domain/grid";
+import { resolveBoard } from "../domain/boards";
+import mardPalette from "../data/mard-291.v1.json";
 
-type AppStep = "import" | "setup" | "variants";
+type AppStep = "import" | "setup" | "variants" | "editing";
 
 export interface ProjectSetup {
   beadSizeId: BeadSizeId;
@@ -18,6 +23,16 @@ export function App() {
     beadSizeId: "standard-5",
     boardPresetId: "square-30"
   });
+  const [project, setProject] = useState(() => createProject());
+
+  if (step === "editing") {
+    return (
+      <EditorScreen
+        project={project}
+        paletteCodes={mardPalette.map(({ code }) => code)}
+      />
+    );
+  }
 
   if (step === "setup") {
     return (
@@ -36,6 +51,16 @@ export function App() {
         imageName={image?.name ?? "图片"}
         setup={setup}
         onBack={() => setStep("setup")}
+        onSelect={() => {
+          const board = resolveBoard(setup.boardPresetId, setup.beadSizeId);
+          setProject({
+            ...createProject(),
+            beadSizeId: setup.beadSizeId,
+            boardPresetId: setup.boardPresetId,
+            grid: createEmptyGrid(board.columns, board.rows)
+          });
+          setStep("editing");
+        }}
       />
     );
   }

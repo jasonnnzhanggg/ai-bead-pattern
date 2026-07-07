@@ -19,6 +19,8 @@ it("moves from image upload to board setup and three candidates", async () => {
   expect(screen.getByText("高还原版")).toBeVisible();
   expect(screen.getByText("推荐成品版")).toBeVisible();
   expect(screen.getByText("易拼版")).toBeVisible();
+  await user.click(screen.getByRole("button", { name: "选择推荐成品版" }));
+  expect(screen.getByRole("heading", { name: "编辑拼豆模板" })).toBeVisible();
 });
 
 it("keeps the upload screen when no image is selected", async () => {

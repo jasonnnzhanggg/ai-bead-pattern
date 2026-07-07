@@ -4,6 +4,7 @@ interface VariantsScreenProps {
   imageName: string;
   setup: ProjectSetup;
   onBack: () => void;
+  onSelect: (variantId: "fidelity" | "balanced" | "easy") => void;
 }
 
 const variants = [
@@ -15,7 +16,8 @@ const variants = [
 export function VariantsScreen({
   imageName,
   setup,
-  onBack
+  onBack,
+  onSelect
 }: VariantsScreenProps) {
   return (
     <main>
@@ -32,7 +34,9 @@ export function VariantsScreen({
           <article key={variant.id}>
             <h2>{variant.title}</h2>
             <p>{variant.detail}</p>
-            <button type="button">选择{variant.title}</button>
+            <button type="button" onClick={() => onSelect(variant.id)}>
+              选择{variant.title}
+            </button>
           </article>
         ))}
       </section>

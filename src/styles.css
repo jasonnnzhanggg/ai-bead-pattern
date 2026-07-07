@@ -90,3 +90,56 @@ fieldset label {
     grid-template-columns: 1fr;
   }
 }
+
+.editor-screen {
+  width: min(1100px, calc(100% - 24px));
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.palette-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 0;
+}
+
+.palette-strip button[aria-pressed="true"] {
+  outline: 3px solid #25231f;
+}
+
+.grid-viewport {
+  overflow: auto;
+  max-height: 65vh;
+  padding: 12px;
+  border: 1px solid #cfc8bb;
+  border-radius: 16px;
+  background: #fffdf8;
+}
+
+.bead-grid {
+  display: grid;
+  width: max-content;
+  min-width: 100%;
+  gap: 1px;
+  background: #d9d2c5;
+}
+
+.bead-cell {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 1px;
+  border: 0;
+  border-radius: 0;
+  background: white;
+  font-size: 8px;
+}
+
+.bead-cell.is-locked {
+  box-shadow: inset 0 0 0 2px #25231f;
+}
