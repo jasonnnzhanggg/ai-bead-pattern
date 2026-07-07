@@ -41,6 +41,14 @@ it("shows every used color in the bottom palette", () => {
   expect(screen.queryByRole("button", { name: /空白/ })).not.toBeInTheDocument();
 });
 
+it("shows bead cells with their MARD palette colors", () => {
+  render(<AssemblyScreen project={project} />);
+
+  expect(screen.getByRole("gridcell", { name: "第1行第2列 C7" })).toHaveStyle({
+    backgroundColor: "#3677D2"
+  });
+});
+
 it("highlights the selected color and dims every other bead", async () => {
   const user = userEvent.setup();
   render(<AssemblyScreen project={project} />);

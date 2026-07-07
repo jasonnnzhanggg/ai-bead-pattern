@@ -3,6 +3,7 @@ import type { BeadProject } from "../domain/project";
 import { orderColors } from "./orderColors";
 import { createRenderModel } from "../export/renderModel";
 import { exportPdf } from "../export/pdf";
+import { beadColorStyle } from "../ui/beadColorStyle";
 
 interface AssemblyScreenProps {
   project: BeadProject;
@@ -123,6 +124,7 @@ export function AssemblyScreen({
                 data-dimmed={dimmed ? "true" : "false"}
                 data-completed={completed ? "true" : "false"}
                 className="bead-cell"
+                style={beadColorStyle(code)}
                 onClick={() => toggleCell(index)}
               >
                 {code ?? ""}
@@ -139,6 +141,7 @@ export function AssemblyScreen({
             type="button"
             aria-label={`选择 ${color.code} ${color.completed}/${color.total}`}
             aria-pressed={selectedCode === color.code}
+            style={beadColorStyle(color.code)}
             onClick={() => setSelectedCode(color.code)}
           >
             <span className="palette-code">{color.code}</span>

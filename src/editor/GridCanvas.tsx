@@ -1,4 +1,5 @@
 import type { BeadGrid } from "../domain/grid";
+import { beadColorStyle } from "../ui/beadColorStyle";
 
 interface GridCanvasProps {
   grid: BeadGrid;
@@ -35,6 +36,7 @@ export function GridCanvas({
             data-color={code ?? ""}
             data-cell={index}
             className={locked ? "bead-cell is-locked" : "bead-cell"}
+            style={beadColorStyle(code)}
             onClick={() => onCellClick(index)}
           >
             {code ?? ""}

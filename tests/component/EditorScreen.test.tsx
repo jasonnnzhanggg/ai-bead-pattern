@@ -52,6 +52,22 @@ it("does not change a locked outline cell", async () => {
   expect(screen.getByRole("status")).toHaveTextContent("轮廓格已锁定");
 });
 
+it("shows bead cells with their MARD palette colors", () => {
+  render(
+    <EditorScreen
+      project={{
+        ...project,
+        grid: { columns: 1, rows: 1, cells: ["C7"] }
+      }}
+      paletteCodes={["C7"]}
+    />
+  );
+
+  expect(screen.getByRole("gridcell", { name: "第1行第1列 C7" })).toHaveStyle({
+    backgroundColor: "#3677D2"
+  });
+});
+
 it("shows a back button when an editor back action is provided", async () => {
   const user = userEvent.setup();
   const onBack = vi.fn();
