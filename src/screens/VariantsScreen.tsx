@@ -3,8 +3,9 @@ import type { ProjectSetup } from "../app/App";
 interface VariantsScreenProps {
   imageName: string;
   setup: ProjectSetup;
+  generationMessage?: string | null;
   onBack: () => void;
-  onSelect: (variantId: "fidelity" | "balanced" | "easy") => void;
+  onSelect: (variantId: "fidelity" | "balanced" | "easy") => void | Promise<void>;
 }
 
 const variants = [
@@ -16,6 +17,7 @@ const variants = [
 export function VariantsScreen({
   imageName,
   setup,
+  generationMessage,
   onBack,
   onSelect
 }: VariantsScreenProps) {
@@ -29,6 +31,11 @@ export function VariantsScreen({
       <p>
         {setup.beadSizeId} · {setup.boardPresetId}
       </p>
+      {generationMessage ? (
+        <p role="status" aria-live="polite">
+          {generationMessage}
+        </p>
+      ) : null}
       <section className="variant-grid" aria-label="模板方案">
         {variants.map((variant) => (
           <article key={variant.id}>
