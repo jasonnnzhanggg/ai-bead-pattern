@@ -1,0 +1,224 @@
+:root {
+  color: #25231f;
+  background: #f7f4ee;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+main {
+  width: min(720px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 72px 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid #25231f;
+  border-radius: 12px;
+  background: #f0c94b;
+  color: #25231f;
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px solid #cfc8bb;
+  border-radius: 16px;
+}
+
+fieldset label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+}
+
+.upload-control {
+  display: grid;
+  gap: 8px;
+  padding: 24px;
+  border: 2px dashed #867b68;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+.variant-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.variant-grid article {
+  padding: 18px;
+  border: 1px solid #cfc8bb;
+  border-radius: 18px;
+  background: #fffdf8;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: 32px 0;
+  }
+
+  .variant-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editor-screen {
+  width: min(1100px, calc(100% - 24px));
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.palette-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 0;
+}
+
+.palette-strip button[aria-pressed="true"] {
+  outline: 3px solid #25231f;
+}
+
+.grid-viewport {
+  overflow: auto;
+  max-height: 65vh;
+  padding: 12px;
+  border: 1px solid #cfc8bb;
+  border-radius: 16px;
+  background: #fffdf8;
+}
+
+.bead-grid {
+  display: grid;
+  width: max-content;
+  min-width: 100%;
+  gap: 1px;
+  background: #d9d2c5;
+}
+
+.bead-cell {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 1px;
+  border: 0;
+  border-radius: 0;
+  background: white;
+  font-size: 8px;
+}
+
+.bead-cell.is-locked {
+  box-shadow: inset 0 0 0 2px #25231f;
+}
+
+.bead-cell[data-focused="true"] {
+  opacity: 1;
+  box-shadow: inset 0 0 0 2px #25231f;
+}
+
+.bead-cell[data-dimmed="true"] {
+  opacity: 0.1;
+}
+
+.bead-cell[data-completed="true"] {
+  background: #dcfce7;
+}
+
+.assembly-palette {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px;
+  border-top: 1px solid #cfc8bb;
+  background: rgba(255, 253, 248, 0.96);
+}
+
+.assembly-screen {
+  padding-bottom: 96px;
+}
+
+.assembly-palette button {
+  display: grid;
+  min-width: 80px;
+  gap: 2px;
+}
+
+.assembly-palette button[aria-pressed="true"] {
+  outline: 3px solid #25231f;
+}
+
+.palette-code {
+  font-weight: 700;
+}
+
+@media (min-width: 800px) {
+  .assembly-palette {
+    flex-wrap: wrap;
+  }
+}
+
+@media (pointer: coarse) {
+  .bead-cell {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
