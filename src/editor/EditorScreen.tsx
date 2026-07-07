@@ -8,6 +8,7 @@ interface EditorScreenProps {
   project: BeadProject;
   paletteCodes: readonly string[];
   lockedCellIndexes?: readonly number[];
+  onBack?: () => void;
   onStartAssembly?: (project: BeadProject) => void;
 }
 
@@ -15,6 +16,7 @@ export function EditorScreen({
   project,
   paletteCodes,
   lockedCellIndexes = [],
+  onBack,
   onStartAssembly
 }: EditorScreenProps) {
   const [store] = useState(() =>
@@ -29,18 +31,25 @@ export function EditorScreen({
           <p>逐格编辑</p>
           <h1>编辑拼豆模板</h1>
         </div>
-        <button
-          type="button"
-          disabled={state.pastGrids.length === 0}
-          onClick={state.undo}
-        >
-          撤销
-        </button>
-        {onStartAssembly ? (
-          <button type="button" onClick={() => onStartAssembly(state.project)}>
-            进入拼豆模式
+        <div className="header-actions">
+          {onBack ? (
+            <button type="button" onClick={onBack}>
+              返回方案
+            </button>
+          ) : null}
+          <button
+            type="button"
+            disabled={state.pastGrids.length === 0}
+            onClick={state.undo}
+          >
+            撤销
           </button>
-        ) : null}
+          {onStartAssembly ? (
+            <button type="button" onClick={() => onStartAssembly(state.project)}>
+              进入拼豆模式
+            </button>
+          ) : null}
+        </div>
       </header>
       <div className="palette-strip" aria-label="色号选择">
         {paletteCodes.map((code) => (

@@ -112,6 +112,7 @@ export function App({ imageToGrid = browserImageToGrid }: AppProps = {}) {
       <EditorScreen
         project={project}
         paletteCodes={mardPalette.map(({ code }) => code)}
+        onBack={() => setStep(image ? "variants" : "import")}
         onStartAssembly={(nextProject) => {
           setProject(nextProject);
           setStep("assembly");

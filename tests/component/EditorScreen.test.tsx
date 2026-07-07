@@ -51,3 +51,20 @@ it("does not change a locked outline cell", async () => {
   );
   expect(screen.getByRole("status")).toHaveTextContent("轮廓格已锁定");
 });
+
+it("shows a back button when an editor back action is provided", async () => {
+  const user = userEvent.setup();
+  const onBack = vi.fn();
+
+  render(
+    <EditorScreen
+      project={project}
+      paletteCodes={["A1", "C7"]}
+      onBack={onBack}
+    />
+  );
+
+  await user.click(screen.getByRole("button", { name: "返回方案" }));
+
+  expect(onBack).toHaveBeenCalledOnce();
+});
