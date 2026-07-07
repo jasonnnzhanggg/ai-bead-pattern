@@ -31,11 +31,50 @@ interface AppProps {
   imageToGrid?: ImageToGrid;
 }
 
+function isAppStep(value: unknown): value is AppStep {
+  return (
+    value === "import" ||
+    value === "setup" ||
+    value === "variants" ||
+    value === "editing" ||
+    value === "assembly"
+  );
+}
+
+function isStoredAppState(value: unknown): value is StoredAppState {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Partial<StoredAppState>;
+  const grid = candidate.project?.grid;
+
+  return (
+    isAppStep(candidate.step) &&
+    Boolean(candidate.project) &&
+    typeof grid?.columns === "number" &&
+    typeof grid?.rows === "number" &&
+    Array.isArray(grid?.cells) &&
+    grid.cells.length === grid.columns * grid.rows
+  );
+}
+
 function loadStoredAppState(): StoredAppState | null {
   try {
     const raw = localStorage.getItem(storageKey);
-    return raw ? (JSON.parse(raw) as StoredAppState) : null;
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw) as unknown;
+    if (isStoredAppState(parsed)) {
+      return parsed;
+    }
+
+    localStorage.removeItem(storageKey);
+    return null;
   } catch {
+    localStorage.removeItem(storageKey);
     return null;
   }
 }
