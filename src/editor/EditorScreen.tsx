@@ -8,12 +8,14 @@ interface EditorScreenProps {
   project: BeadProject;
   paletteCodes: readonly string[];
   lockedCellIndexes?: readonly number[];
+  onStartAssembly?: (project: BeadProject) => void;
 }
 
 export function EditorScreen({
   project,
   paletteCodes,
-  lockedCellIndexes = []
+  lockedCellIndexes = [],
+  onStartAssembly
 }: EditorScreenProps) {
   const [store] = useState(() =>
     createProjectEditorStore(project, lockedCellIndexes)
@@ -34,6 +36,11 @@ export function EditorScreen({
         >
           撤销
         </button>
+        {onStartAssembly ? (
+          <button type="button" onClick={() => onStartAssembly(state.project)}>
+            进入拼豆模式
+          </button>
+        ) : null}
       </header>
       <div className="palette-strip" aria-label="色号选择">
         {paletteCodes.map((code) => (

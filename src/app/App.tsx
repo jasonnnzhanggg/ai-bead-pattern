@@ -4,12 +4,13 @@ import { ImportScreen } from "../screens/ImportScreen";
 import { SetupScreen } from "../screens/SetupScreen";
 import { VariantsScreen } from "../screens/VariantsScreen";
 import { EditorScreen } from "../editor/EditorScreen";
+import { AssemblyScreen } from "../assembly/AssemblyScreen";
 import { createProject } from "../domain/project";
 import { createEmptyGrid } from "../domain/grid";
 import { resolveBoard } from "../domain/boards";
 import mardPalette from "../data/mard-291.v1.json";
 
-type AppStep = "import" | "setup" | "variants" | "editing";
+type AppStep = "import" | "setup" | "variants" | "editing" | "assembly";
 
 export interface ProjectSetup {
   beadSizeId: BeadSizeId;
@@ -25,11 +26,19 @@ export function App() {
   });
   const [project, setProject] = useState(() => createProject());
 
+  if (step === "assembly") {
+    return <AssemblyScreen project={project} onBack={() => setStep("editing")} />;
+  }
+
   if (step === "editing") {
     return (
       <EditorScreen
         project={project}
         paletteCodes={mardPalette.map(({ code }) => code)}
+        onStartAssembly={(nextProject) => {
+          setProject(nextProject);
+          setStep("assembly");
+        }}
       />
     );
   }
