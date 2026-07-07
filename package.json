@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "export:fixtures": "node scripts/export-fixtures.mjs"
   },
   "dependencies": {
     "@svgdotjs/svg.js": "^3.2.5",
