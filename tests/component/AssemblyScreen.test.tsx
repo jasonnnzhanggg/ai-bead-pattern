@@ -69,3 +69,25 @@ it("marks a focused cell complete without editing its color", async () => {
   expect(screen.getByRole("button", { name: "选择 C7 1/2" })).toBeVisible();
   expect(screen.getByRole("status")).toHaveTextContent("已完成 1/2");
 });
+
+it("reports completion changes so the project can resume after reload", async () => {
+  const user = userEvent.setup();
+  const onProjectChange = vi.fn();
+  render(<AssemblyScreen project={project} onProjectChange={onProjectChange} />);
+
+  await user.click(screen.getByRole("button", { name: "选择 C7 0/2" }));
+  await user.click(screen.getByRole("gridcell", { name: "第1行第2列 C7" }));
+
+  expect(onProjectChange).toHaveBeenCalledWith(
+    expect.objectContaining({ completedCellIndexes: [1] })
+  );
+});
+
+it("exports a PDF from assembly mode", async () => {
+  const user = userEvent.setup();
+  render(<AssemblyScreen project={project} />);
+
+  await user.click(screen.getByRole("button", { name: "导出PDF" }));
+
+  expect(screen.getByRole("status")).toHaveTextContent("PDF已生成");
+});

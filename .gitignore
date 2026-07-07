@@ -3,6 +3,9 @@
 work/
 outputs/
 node_modules/
+.playwright-browsers/
+playwright-report/
+test-results/
 dist/
 *.tsbuildinfo
 vite.config.js

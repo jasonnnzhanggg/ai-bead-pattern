@@ -1,22 +1,32 @@
 import { useMemo, useState } from "react";
 import type { BeadProject } from "../domain/project";
 import { orderColors } from "./orderColors";
+import { createRenderModel } from "../export/renderModel";
+import { exportPdf } from "../export/pdf";
 
 interface AssemblyScreenProps {
   project: BeadProject;
   onBack?: () => void;
+  onProjectChange?: (project: BeadProject) => void;
 }
 
-export function AssemblyScreen({ project, onBack }: AssemblyScreenProps) {
+export function AssemblyScreen({
+  project,
+  onBack,
+  onProjectChange
+}: AssemblyScreenProps) {
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [completedCellIndexes, setCompletedCellIndexes] = useState(
     () => new Set(project.completedCellIndexes)
   );
+  const [exportMessage, setExportMessage] = useState("");
   const colors = useMemo(
     () => orderColors(project.grid, [...completedCellIndexes]),
     [project.grid, completedCellIndexes]
   );
   const selectedColor = colors.find((color) => color.code === selectedCode);
+  const completedCount = completedCellIndexes.size;
+  const occupiedCount = project.grid.cells.filter(Boolean).length;
 
   function toggleCell(index: number) {
     if (!selectedCode || project.grid.cells[index] !== selectedCode) {
@@ -29,8 +39,27 @@ export function AssemblyScreen({ project, onBack }: AssemblyScreenProps) {
       } else {
         next.add(index);
       }
+      onProjectChange?.({
+        ...project,
+        completedCellIndexes: [...next].sort((left, right) => left - right),
+        updatedAt: Date.now()
+      });
       return next;
     });
+  }
+
+  function exportCurrentPdf() {
+    const blob = exportPdf({
+      ...createRenderModel({
+        ...project,
+        completedCellIndexes: [...completedCellIndexes]
+      })
+    });
+    if (typeof URL.createObjectURL === "function") {
+      const url = URL.createObjectURL(blob);
+      URL.revokeObjectURL(url);
+    }
+    setExportMessage("PDF已生成");
   }
 
   return (
@@ -40,17 +69,26 @@ export function AssemblyScreen({ project, onBack }: AssemblyScreenProps) {
           <p>拼豆模式</p>
           <h1>按颜色完成拼豆</h1>
         </div>
-        {onBack ? (
-          <button type="button" onClick={onBack}>
-            返回编辑
+        <div className="header-actions">
+          <button type="button" onClick={exportCurrentPdf}>
+            导出PDF
           </button>
-        ) : null}
+          {onBack ? (
+            <button type="button" onClick={onBack}>
+              返回编辑
+            </button>
+          ) : null}
+        </div>
       </header>
 
       <p role="status" aria-live="polite">
-        {selectedColor
-          ? `已完成 ${selectedColor.completed}/${selectedColor.total}`
-          : "请选择底部色号开始"}
+        {exportMessage
+          ? exportMessage
+          : selectedColor
+            ? `已完成 ${selectedColor.completed}/${selectedColor.total}`
+            : completedCount > 0
+              ? `已完成 ${completedCount}/${occupiedCount}`
+              : "请选择底部色号开始"}
       </p>
 
       <div className="grid-viewport">
@@ -79,6 +117,8 @@ export function AssemblyScreen({ project, onBack }: AssemblyScreenProps) {
                 role="gridcell"
                 aria-label={label}
                 data-color={code ?? ""}
+                data-cell={`${column},${row}`}
+                data-index={index}
                 data-focused={focused ? "true" : "false"}
                 data-dimmed={dimmed ? "true" : "false"}
                 data-completed={completed ? "true" : "false"}

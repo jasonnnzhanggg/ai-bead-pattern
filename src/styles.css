@@ -38,6 +38,12 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
@@ -100,6 +106,13 @@ fieldset label {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 .palette-strip {
@@ -168,6 +181,10 @@ fieldset label {
   background: rgba(255, 253, 248, 0.96);
 }
 
+.assembly-screen {
+  padding-bottom: 96px;
+}
+
 .assembly-palette button {
   display: grid;
   min-width: 80px;
@@ -185,5 +202,23 @@ fieldset label {
 @media (min-width: 800px) {
   .assembly-palette {
     flex-wrap: wrap;
+  }
+}
+
+@media (pointer: coarse) {
+  .bead-cell {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

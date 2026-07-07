@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { BeadSizeId, BoardPresetId } from "../domain/boards";
 import { ImportScreen } from "../screens/ImportScreen";
 import { SetupScreen } from "../screens/SetupScreen";
@@ -11,23 +11,52 @@ import { resolveBoard } from "../domain/boards";
 import mardPalette from "../data/mard-291.v1.json";
 
 type AppStep = "import" | "setup" | "variants" | "editing" | "assembly";
+const storageKey = "ai-bead-pattern.active-project.v1";
 
 export interface ProjectSetup {
   beadSizeId: BeadSizeId;
   boardPresetId: BoardPresetId;
 }
 
+interface StoredAppState {
+  step: AppStep;
+  project: ReturnType<typeof createProject>;
+}
+
+function loadStoredAppState(): StoredAppState | null {
+  try {
+    const raw = localStorage.getItem(storageKey);
+    return raw ? (JSON.parse(raw) as StoredAppState) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function App() {
-  const [step, setStep] = useState<AppStep>("import");
+  const stored = loadStoredAppState();
+  const [step, setStep] = useState<AppStep>(stored?.step ?? "import");
   const [image, setImage] = useState<File | null>(null);
   const [setup, setSetup] = useState<ProjectSetup>({
     beadSizeId: "standard-5",
     boardPresetId: "square-30"
   });
-  const [project, setProject] = useState(() => createProject());
+  const [project, setProject] = useState(() => stored?.project ?? createProject());
+
+  useEffect(() => {
+    if (step === "import") {
+      return;
+    }
+    localStorage.setItem(storageKey, JSON.stringify({ step, project }));
+  }, [project, step]);
 
   if (step === "assembly") {
-    return <AssemblyScreen project={project} onBack={() => setStep("editing")} />;
+    return (
+      <AssemblyScreen
+        project={project}
+        onProjectChange={setProject}
+        onBack={() => setStep("editing")}
+      />
+    );
   }
 
   if (step === "editing") {
