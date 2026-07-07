@@ -17,6 +17,7 @@ export interface BeadProject {
   boardPresetId: BoardPresetId;
   orientation: Orientation;
   grid: BeadGrid;
+  ownedColorCodes: string[];
   completedCellIndexes: number[];
 }
 
@@ -38,6 +39,7 @@ export function createProject(
     boardPresetId,
     orientation: "portrait",
     grid: createEmptyGrid(board.columns, board.rows),
+    ownedColorCodes: [],
     completedCellIndexes: []
   };
 }

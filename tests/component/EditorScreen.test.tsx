@@ -13,6 +13,7 @@ const project: BeadProject = {
   boardPresetId: "square-30",
   orientation: "portrait",
   grid: { columns: 2, rows: 2, cells: ["A1", null, null, null] },
+  ownedColorCodes: [],
   completedCellIndexes: []
 };
 
